@@ -127,7 +127,7 @@ export default function Hero() {
               {stackItems.map((item, index) => {
                 const isSelected = selectedItem === item.id;
                 // Calculate vertical position based on whether there's a selected item
-                const baseOffset = isSelected ? 0 : (selectedItem !== null ? 200 : 0);
+                const baseOffset = isSelected ? 0 : (selectedItem !== null ? 300 : 0);
                 const yPosition = index * 80 + baseOffset;
 
                 return (
