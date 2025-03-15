@@ -79,7 +79,7 @@ export default function Hero() {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{
                     opacity: 1,
-                    y: index * 20, // Reduced spacing between cards
+                    y: index * 60, 
                     scale: selectedItem === item.id ? 1.05 : 1,
                     zIndex: stackItems.length - index,
                   }}
