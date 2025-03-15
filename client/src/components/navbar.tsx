@@ -82,14 +82,11 @@ export default function Navbar() {
               />
             </motion.button>
           ))}
-          <Button 
-            onClick={() => scrollTo("#contact")}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            as={motion.button}
-          >
-            Get Started
-          </Button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button onClick={() => scrollTo("#contact")}>
+              Get Started
+            </Button>
+          </motion.div>
         </div>
 
         {/* Mobile Navigation */}
@@ -112,14 +109,11 @@ export default function Navbar() {
                   {item.label}
                 </motion.button>
               ))}
-              <Button 
-                onClick={() => scrollTo("#contact")} 
-                className="mt-4"
-                whileTap={{ scale: 0.95 }}
-                as={motion.button}
-              >
-                Get Started
-              </Button>
+              <motion.div whileTap={{ scale: 0.95 }}>
+                <Button onClick={() => scrollTo("#contact")} className="mt-4 w-full">
+                  Get Started
+                </Button>
+              </motion.div>
             </div>
           </SheetContent>
         </Sheet>
