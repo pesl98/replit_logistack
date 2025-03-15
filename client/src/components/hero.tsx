@@ -32,6 +32,57 @@ export default function Hero() {
     }, 1000);
   }, [stackItems, selectedItem]);
 
+  const getItemDescription = (text: string) => {
+    switch (text) {
+      case "AI Solutions":
+        return `Leverage cutting-edge AI technologies to transform your business processes and drive innovation. Our AI solutions include:
+        • Custom AI model development and implementation
+        • Natural Language Processing for document analysis
+        • Predictive analytics and forecasting systems
+        • Machine learning for process automation
+        • AI-powered decision support systems
+        • Real-time data analysis and insights
+        • Intelligent chatbots and virtual assistants
+        • Computer vision solutions for quality control`;
+
+      case "SAP Integration":
+        return `Seamlessly integrate AI capabilities with your existing SAP infrastructure for enhanced efficiency. Our integration services include:
+        • End-to-end SAP system integration
+        • Custom SAP module development
+        • AI-enhanced SAP workflows
+        • Automated data synchronization
+        • Real-time analytics integration
+        • Legacy system migration
+        • Performance optimization
+        • Security and compliance implementation`;
+
+      case "Process Optimization":
+        return `Streamline operations with intelligent automation and data-driven process improvements. Our optimization solutions include:
+        • Business process analysis and redesign
+        • Workflow automation implementation
+        • Performance metrics and KPI tracking
+        • Bottleneck identification and resolution
+        • Resource allocation optimization
+        • Quality control automation
+        • Cost reduction strategies
+        • Continuous improvement frameworks`;
+
+      case "Digital Transformation":
+        return `Embrace digital evolution with comprehensive transformation strategies and solutions. Our transformation services include:
+        • Digital strategy development
+        • Technology infrastructure modernization
+        • Cloud migration and optimization
+        • Data architecture redesign
+        • Digital workplace implementation
+        • Customer experience enhancement
+        • Digital security framework
+        • Change management and training`;
+
+      default:
+        return "";
+    }
+  };
+
   return (
     <section className="relative min-h-screen pt-16 bg-gradient-to-b from-background to-primary/5">
       <div className="container mx-auto px-4">
@@ -107,11 +158,8 @@ export default function Hero() {
                           transition={{ duration: 0.3 }}
                           className="mt-4"
                         >
-                          <p className="text-muted-foreground">
-                            {item.text === "AI Solutions" && "Leverage cutting-edge AI technologies to transform your business processes and drive innovation."}
-                            {item.text === "SAP Integration" && "Seamlessly integrate AI capabilities with your existing SAP infrastructure for enhanced efficiency."}
-                            {item.text === "Process Optimization" && "Streamline operations with intelligent automation and data-driven process improvements."}
-                            {item.text === "Digital Transformation" && "Embrace digital evolution with comprehensive transformation strategies and solutions."}
+                          <p className="text-muted-foreground whitespace-pre-line">
+                            {getItemDescription(item.text)}
                           </p>
                         </motion.div>
                       )}
