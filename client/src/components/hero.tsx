@@ -130,7 +130,7 @@ export default function Hero() {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{
                     opacity: 1,
-                    y: index * 80, // Increased spacing between cards
+                    y: index * 80, 
                     scale: selectedItem === item.id ? 1.05 : 1,
                     zIndex: stackItems.length - index,
                   }}
@@ -143,12 +143,12 @@ export default function Hero() {
                 >
                   <div 
                     className={`
-                      bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-lg border border-bronze/20
+                      bg-white/80 backdrop-blur-sm rounded-lg shadow-lg border border-bronze/20
                       transition-all duration-300
                       ${selectedItem === item.id ? 'scale-105' : 'hover:scale-102'}
                     `}
                   >
-                    <h3 className="text-xl font-semibold text-primary">{item.text}</h3>
+                    <h3 className="text-xl font-semibold text-primary p-6">{item.text}</h3>
                     <AnimatePresence>
                       {selectedItem === item.id && (
                         <motion.div
@@ -156,7 +156,7 @@ export default function Hero() {
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="mt-4"
+                          className="px-6 pb-6 border-t border-bronze/20"
                         >
                           <p className="text-muted-foreground whitespace-pre-line">
                             {getItemDescription(item.text)}
