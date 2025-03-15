@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
-import { Menu } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { Menu, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
   { label: "Services", href: "#services" },
@@ -17,6 +18,7 @@ const navItems = [
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [location, setLocation] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,34 +29,67 @@ export default function Navbar() {
   }, []);
 
   const scrollTo = (id: string) => {
-    document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+    if (location !== "/") {
+      setLocation("/");
+      setTimeout(() => {
+        document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const goHome = () => {
+    if (location !== "/") {
+      setLocation("/");
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
-    <nav
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         isScrolled ? "bg-background/95 backdrop-blur-sm border-b" : ""
       }`}
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/">
-          <a className="font-bold text-2xl">
+        <button onClick={goHome} className="flex items-center gap-2 group">
+          <Home className="w-5 h-5 text-primary transition-colors group-hover:text-primary/80" />
+          <span className="font-bold text-2xl">
             Logi<span className="text-primary">stack</span>
-          </a>
-        </Link>
+          </span>
+        </button>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex gap-8">
           {navItems.map((item) => (
-            <button
+            <motion.button
               key={item.href}
               onClick={() => scrollTo(item.href)}
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="text-muted-foreground hover:text-foreground transition-colors relative"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               {item.label}
-            </button>
+              <motion.div
+                className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"
+                initial={{ scaleX: 0 }}
+                whileHover={{ scaleX: 1 }}
+                transition={{ duration: 0.2 }}
+              />
+            </motion.button>
           ))}
-          <Button onClick={() => scrollTo("#contact")}>Get Started</Button>
+          <Button 
+            onClick={() => scrollTo("#contact")}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            as={motion.button}
+          >
+            Get Started
+          </Button>
         </div>
 
         {/* Mobile Navigation */}
@@ -67,21 +102,28 @@ export default function Navbar() {
           <SheetContent>
             <div className="flex flex-col gap-4 mt-8">
               {navItems.map((item) => (
-                <button
+                <motion.button
                   key={item.href}
                   onClick={() => scrollTo(item.href)}
                   className="text-left py-2 text-muted-foreground hover:text-foreground transition-colors"
+                  whileHover={{ x: 10 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   {item.label}
-                </button>
+                </motion.button>
               ))}
-              <Button onClick={() => scrollTo("#contact")} className="mt-4">
+              <Button 
+                onClick={() => scrollTo("#contact")} 
+                className="mt-4"
+                whileTap={{ scale: 0.95 }}
+                as={motion.button}
+              >
                 Get Started
               </Button>
             </div>
           </SheetContent>
         </Sheet>
       </div>
-    </nav>
+    </motion.nav>
   );
 }
