@@ -124,49 +124,56 @@ export default function Hero() {
 
           <div className="relative h-[400px]">
             <AnimatePresence>
-              {stackItems.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{
-                    opacity: 1,
-                    y: index * 80, 
-                    scale: selectedItem === item.id ? 1.05 : 1,
-                    zIndex: stackItems.length - index,
-                  }}
-                  transition={{
-                    duration: 0.5,
-                    delay: item.delay
-                  }}
-                  onClick={() => handleItemClick(item.id)}
-                  className="absolute w-full cursor-pointer"
-                >
-                  <div 
-                    className={`
-                      bg-white/80 backdrop-blur-sm rounded-lg shadow-lg border border-bronze/20
-                      transition-all duration-300
-                      ${selectedItem === item.id ? 'scale-105' : 'hover:scale-102'}
-                    `}
+              {stackItems.map((item, index) => {
+                const isSelected = selectedItem === item.id;
+                // Calculate vertical position based on whether there's a selected item
+                const baseOffset = isSelected ? 0 : (selectedItem !== null ? 200 : 0);
+                const yPosition = index * 80 + baseOffset;
+
+                return (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{
+                      opacity: 1,
+                      y: yPosition, 
+                      scale: isSelected ? 1.05 : 1,
+                      zIndex: stackItems.length - index,
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      delay: item.delay
+                    }}
+                    onClick={() => handleItemClick(item.id)}
+                    className="absolute w-full cursor-pointer"
                   >
-                    <h3 className="text-xl font-semibold text-primary p-6">{item.text}</h3>
-                    <AnimatePresence>
-                      {selectedItem === item.id && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="px-6 pb-6 border-t border-bronze/20"
-                        >
-                          <p className="text-muted-foreground whitespace-pre-line">
-                            {getItemDescription(item.text)}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </motion.div>
-              ))}
+                    <div 
+                      className={`
+                        bg-white/80 backdrop-blur-sm rounded-lg shadow-lg border border-bronze/20
+                        transition-all duration-300
+                        ${isSelected ? 'scale-105' : 'hover:scale-102'}
+                      `}
+                    >
+                      <h3 className="text-xl font-semibold text-primary p-6">{item.text}</h3>
+                      <AnimatePresence>
+                        {isSelected && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="px-6 pb-6 border-t border-bronze/20"
+                          >
+                            <p className="text-muted-foreground whitespace-pre-line">
+                              {getItemDescription(item.text)}
+                            </p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </AnimatePresence>
           </div>
         </div>
