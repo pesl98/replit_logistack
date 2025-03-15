@@ -11,27 +11,26 @@ export default function Hero() {
     { id: 4, text: "Digital Transformation", delay: 0.8 },
   ]);
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
-  const [isShuffling, setIsShuffling] = useState(false);
 
   const handleItemClick = useCallback((id: number) => {
-    if (isShuffling || selectedItem !== null) return;
-
-    setIsShuffling(true);
-
-    // Shuffle animation
-    const shuffleItems = [...stackItems];
-    for (let i = shuffleItems.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffleItems[i], shuffleItems[j]] = [shuffleItems[j], shuffleItems[i]];
+    if (selectedItem === id) {
+      // If clicking the same item, close it
+      setSelectedItem(null);
+      return;
     }
-    setStackItems(shuffleItems);
 
-    // Set selected item after shuffle animation
+    // Move the selected item to the top of the stack
+    const newStackOrder = [
+      ...stackItems.filter(item => item.id === id),
+      ...stackItems.filter(item => item.id !== id)
+    ];
+    setStackItems(newStackOrder);
+
+    // Wait a second before expanding
     setTimeout(() => {
       setSelectedItem(id);
-      setIsShuffling(false);
-    }, 3000);
-  }, [stackItems, isShuffling, selectedItem]);
+    }, 1000);
+  }, [stackItems, selectedItem]);
 
   return (
     <section className="relative min-h-screen pt-16 bg-gradient-to-b from-background to-primary/5">
@@ -77,49 +76,46 @@ export default function Hero() {
               {stackItems.map((item, index) => (
                 <motion.div
                   key={item.id}
-                  initial={{ opacity: 0, x: 100 }}
+                  initial={{ opacity: 0, y: -20 }}
                   animate={{
                     opacity: 1,
-                    x: 0,
-                    y: selectedItem === item.id ? 0 : `${index * 100}px`,
-                    scale: selectedItem === item.id ? 1.1 : 1,
-                    zIndex: selectedItem === item.id ? 50 : stackItems.length - index,
+                    y: index * 20, // Reduced spacing between cards
+                    scale: selectedItem === item.id ? 1.05 : 1,
+                    zIndex: stackItems.length - index,
                   }}
-                  exit={{ opacity: 0, x: -100 }}
                   transition={{
                     duration: 0.5,
-                    delay: isShuffling ? Math.random() * 0.5 : item.delay
+                    delay: item.delay
                   }}
                   onClick={() => handleItemClick(item.id)}
                   className="absolute w-full cursor-pointer"
-                  style={{
-                    top: selectedItem === item.id ? '50%' : `${index * 100}px`,
-                    transform: selectedItem === item.id ? 'translateY(-50%)' : 'none',
-                  }}
                 >
                   <div 
                     className={`
                       bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-lg border border-bronze/20
                       transition-all duration-300
-                      ${selectedItem === item.id ? 'scale-110' : 'hover:scale-105'}
+                      ${selectedItem === item.id ? 'scale-105' : 'hover:scale-102'}
                     `}
                   >
                     <h3 className="text-xl font-semibold text-primary">{item.text}</h3>
-                    {selectedItem === item.id && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        transition={{ delay: 3.5 }}
-                        className="mt-4"
-                      >
-                        <p className="text-muted-foreground">
-                          {item.text === "AI Solutions" && "Leverage cutting-edge AI technologies to transform your business processes and drive innovation."}
-                          {item.text === "SAP Integration" && "Seamlessly integrate AI capabilities with your existing SAP infrastructure for enhanced efficiency."}
-                          {item.text === "Process Optimization" && "Streamline operations with intelligent automation and data-driven process improvements."}
-                          {item.text === "Digital Transformation" && "Embrace digital evolution with comprehensive transformation strategies and solutions."}
-                        </p>
-                      </motion.div>
-                    )}
+                    <AnimatePresence>
+                      {selectedItem === item.id && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-4"
+                        >
+                          <p className="text-muted-foreground">
+                            {item.text === "AI Solutions" && "Leverage cutting-edge AI technologies to transform your business processes and drive innovation."}
+                            {item.text === "SAP Integration" && "Seamlessly integrate AI capabilities with your existing SAP infrastructure for enhanced efficiency."}
+                            {item.text === "Process Optimization" && "Streamline operations with intelligent automation and data-driven process improvements."}
+                            {item.text === "Digital Transformation" && "Embrace digital evolution with comprehensive transformation strategies and solutions."}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </motion.div>
               ))}
