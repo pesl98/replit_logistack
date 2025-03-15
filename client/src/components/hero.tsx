@@ -139,37 +139,67 @@ export default function Hero() {
                       y: yPosition, 
                       scale: isSelected ? 1.05 : 1,
                       zIndex: stackItems.length - index,
+                      rotateX: 0,
+                      rotateY: 0,
+                    }}
+                    whileHover={{
+                      scale: isSelected ? 1.05 : 1.02,
+                      rotateX: 5,
+                      rotateY: -5,
+                      transition: { duration: 0.2 }
                     }}
                     transition={{
                       duration: 0.5,
                       delay: item.delay
                     }}
                     onClick={() => handleItemClick(item.id)}
-                    className="absolute w-full cursor-pointer"
+                    className="absolute w-full cursor-pointer perspective-1000"
+                    style={{
+                      transformStyle: "preserve-3d",
+                    }}
                   >
                     <div 
                       className={`
-                        bg-white/80 backdrop-blur-sm rounded-lg shadow-lg border border-bronze/20
+                        relative overflow-hidden
+                        bg-white/80 backdrop-blur-sm rounded-lg shadow-lg
                         transition-all duration-300
+                        before:absolute before:inset-0 
+                        before:bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]
+                        before:opacity-0 before:transition-opacity before:duration-300
+                        hover:before:opacity-100
                         ${isSelected ? 'scale-105' : 'hover:scale-102'}
                       `}
+                      style={{
+                        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 1px, transparent 1px)",
+                        backgroundSize: "20px 20px",
+                        border: "1px solid transparent",
+                        backgroundClip: "padding-box",
+                        boxShadow: `
+                          inset 0 0 0 1px rgba(255,255,255,0.15),
+                          0 0 0 1px rgba(255,255,255,0.1),
+                          0 4px 16px rgba(0,0,0,0.1)
+                        `,
+                      }}
                     >
-                      <h3 className="text-xl font-semibold text-primary p-6">{item.text}</h3>
-                      <AnimatePresence>
-                        {isSelected && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="px-6 pb-6 border-t border-bronze/20"
-                          >
-                            <p className="text-muted-foreground whitespace-pre-line">
-                              {getItemDescription(item.text)}
-                            </p>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      <div className="absolute inset-[-1px] rounded-lg bg-gradient-to-r from-bronze/30 via-primary/30 to-bronze/30 animate-shimmer" />
+                      <div className="relative">
+                        <h3 className="text-xl font-semibold text-primary p-6">{item.text}</h3>
+                        <AnimatePresence>
+                          {isSelected && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="px-6 pb-6 border-t border-bronze/20"
+                            >
+                              <p className="text-muted-foreground whitespace-pre-line">
+                                {getItemDescription(item.text)}
+                              </p>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </div>
                   </motion.div>
                 );
